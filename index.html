@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>國文會考測驗 (第一、二冊)</title>
+    <title>115年國文會考測驗 (第一、二冊)</title>
     <style>
         body {
             font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
@@ -175,7 +175,7 @@
 </head>
 <body>
 
-    <h1>國文會考測驗 (對應教材：第一、二冊)</h1>
+    <h1>115年國文會考測驗 (對應教材：第一、二冊)</h1>
     
     <div class="info-bar">
         <span>請完成所有題目後，點擊最下方「對答」按鈕。</span>
@@ -334,7 +334,7 @@
         </div>
     </form>
 
-    <!-- 對答與PDF按鈕移至最下方 -->
+    <!-- 對答與PDF按鈕 -->
     <div class="controls">
         <button type="button" id="submit-btn" class="btn btn-submit">✅ 對答</button>
         <button type="button" id="retry-btn" class="btn btn-retry">🔄 重新作答</button>
@@ -479,7 +479,7 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
-            // 清除紀錄功能 (選用)
+            // 清除紀錄功能
             clearHistoryBtn.addEventListener('click', () => {
                 if (confirm("確定要清除所有作答紀錄嗎？")) {
                     localStorage.removeItem('chineseQuizHistory');
