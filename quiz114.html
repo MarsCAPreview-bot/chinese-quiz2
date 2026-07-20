@@ -115,7 +115,14 @@
             justify-content: center;
         }
         .btn-pdf:hover {
-            background-color: #2980b9;
+            background-color: #8e44ad;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-home:hover {
+            background-color: #9b59b6;
         }
 
         .result-section {
@@ -312,6 +319,7 @@
         <button type="button" id="submit-btn" class="btn btn-submit">✅ 對答</button>
         <button type="button" id="retry-btn" class="btn btn-retry">🔄 重新作答</button>
         <a href="114會考國文解析.pdf" target="_blank" class="btn btn-pdf">📄 前往查看 PDF 詳解</a>
+        <a href="index.html" class="btn btn-home">🏠 回到總覽</a>
     </div>
 
     <!-- 成績結果顯示區 -->
@@ -409,6 +417,7 @@
                 if (accuracy === 100) {
                     msg = "恭喜你使出極限威能打敗了本關BOSS 🏆";
                     resultMessage.style.color = "#27ae60";
+                    localStorage.setItem('rewardPending', 'true');
                 } else if (accuracy >= 80) {
                     msg = "我知道你可以的，不確定的選項再確認清楚然後來挑戰大魔王吧 💪";
                     resultMessage.style.color = "#2980b9";
