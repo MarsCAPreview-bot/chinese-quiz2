@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>歷屆國文會考測驗總覽</title>
+    <title>歷屆國文會考BOSS攻略挑戰</title>
     <style>
         body {
             font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
@@ -22,6 +22,7 @@
         p.subtitle {
             color: #7f8c8d;
             margin-bottom: 40px;
+            font-weight: bold;
         }
         .menu-container {
             display: flex;
@@ -44,33 +45,106 @@
         }
         .menu-btn:hover {
             background-color: #2980b9;
-            transform: translateY(-2px); /* 滑鼠游標移過去會有微微浮起的特效 */
+            transform: translateY(-2px);
             box-shadow: 0 6px 8px rgba(0,0,0,0.15);
         }
         .footer {
             margin-top: 50px;
             font-size: 0.9em;
             color: #bdc3c7;
+            font-weight: bold;
+        }
+
+        /* 隱藏獎勵彈出視窗 (Modal) 樣式 */
+        .modal-overlay {
+            display: none; /* 預設隱藏 */
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: popIn 0.5s ease-out;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .modal-title { 
+            color: #e67e22; 
+            font-size: 1.6em; 
+            font-weight: bold; 
+            margin-bottom: 15px; 
+        }
+        .reward-btn {
+            display: block; 
+            width: 100%; 
+            padding: 15px; 
+            margin: 10px 0;
+            background: #e74c3c; 
+            color: white; 
+            border: none; 
+            border-radius: 8px;
+            font-size: 1.1em; 
+            font-weight: bold;
+            cursor: pointer; 
+            transition: background 0.3s;
+        }
+        .reward-btn:hover { 
+            background: #c0392b; 
         }
     </style>
 </head>
 <body>
 
-    <h1>📚 歷屆國文會考測驗系統</h1>
-    <p class="subtitle">請選擇您要挑戰的年度測驗</p>
+    <h1>📚 歷屆國文會考BOSS攻略挑戰(第1-2冊)</h1>
+    <p class="subtitle">請選擇您要挑戰的年度測驗BOSS. 3, 2, 1, GO~~SHOOT</p>
 
     <div class="menu-container">
-        <!-- href 裡面對應的就是您上傳的 HTML 檔案名稱 -->
-        <a href="quiz115.html" class="menu-btn">📝 115年國文會考測驗</a>
-        <a href="quiz114.html" class="menu-btn">📝 114年國文會考測驗</a>
-        
-        <!-- 未來可以隨時新增更多年度 -->
-        <!-- <a href="quiz113.html" class="menu-btn">📝 113年國文會考測驗</a> -->
+        <a href="quiz115.html" class="menu-btn">📝 115年 攻略挑戰</a>
+        <a href="quiz114.html" class="menu-btn">📝 114年 攻略挑戰</a>
     </div>
 
     <div class="footer">
-        祝您學習順利，考試高分！
+        一起攻略會考吧GOGO
     </div>
 
+    <!-- 隱藏獎勵彈出視窗 -->
+    <div class="modal-overlay" id="reward-modal">
+        <div class="modal-content">
+            <div class="modal-title">🎉 完美攻略！加 5 分！<br>解鎖隱藏獎勵 🎁</div>
+            <p style="margin-bottom: 20px; color: #555;">您展現了極限威能，請選擇您的通關獎勵：</p>
+            <button class="reward-btn" onclick="claimReward('看Youtube 30分鐘')">📺 看Youtube 30分鐘</button>
+            <button class="reward-btn" onclick="claimReward('玩遊戲時間+20分鐘')">🎮 玩遊戲時間+20分鐘</button>
+            <button class="reward-btn" onclick="claimReward('選擇想吃的晚餐')">🍔 選擇想吃的晚餐</button>
+        </div>
+    </div>
+
+    <script>
+        // 當網頁載入時，檢查是否有尚未領取的隱藏獎勵
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('rewardPending') === 'true') {
+                document.getElementById('reward-modal').style.display = 'flex';
+            }
+        });
+
+        // 點擊獎勵按鈕後的動作
+        function claimReward(rewardName) {
+            alert("✨ 恭喜！您已選擇獎勵：【" + rewardName + "】！請截圖或找關主兌換！");
+            // 清除獎勵狀態，避免重整網頁後重複彈出
+            localStorage.removeItem('rewardPending');
+            // 關閉視窗
+            document.getElementById('reward-modal').style.display = 'none';
+        }
+    </script>
 </body>
 </html>
