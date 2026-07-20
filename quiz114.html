@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>115年國文會考測驗 (第一、二冊)</title>
+    <style>
+        body {
+            font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .info-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .question-block {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: border 0.3s;
+            border: 2px solid transparent;
+        }
+        .question-block.wrong {
+            border: 2px solid #e74c3c;
+            background-color: #fdf5f5;
+        }
+        .question-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .reading-text {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 0.95em;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .option-label:hover {
+            background-color: #f0f8ff;
+            border-color: #3498db;
+        }
+        .option-label input[type="radio"] {
+            margin-right: 15px;
+            transform: scale(1.2);
+        }
+        
+        /* 按鈕區塊設定 */
+        .controls {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            font-size: 1.2em;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            transition: background 0.3s;
+        }
+        .btn-submit {
+            background-color: #2ecc71;
+        }
+        .btn-submit:hover {
+            background-color: #27ae60;
+        }
+        .btn-retry {
+            background-color: #f39c12;
+            display: none;
+        }
+        .btn-retry:hover {
+            background-color: #d68910;
+        }
+        .btn-pdf {
+            background-color: #3498db;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-pdf:hover {
+            background-color: #2980b9;
+        }
+
+        .result-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: none;
+        }
+        .result-message {
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        .history-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .history-section h3 {
+            margin-top: 0;
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-clear {
+            font-size: 0.8em;
+            padding: 5px 10px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .btn-clear:hover {
+            background-color: #c0392b;
+        }
+        .history-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .history-list li {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-left: 4px solid #3498db;
+            margin-bottom: 8px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>115年國文會考測驗 (對應教材：第一、二冊)</h1>
+    
+    <div class="info-bar">
+        <span>請完成所有題目後，點擊最下方「對答」按鈕。</span>
+    </div>
+
+    <form id="quiz-form">
+        <!-- Q1 -->
+        <div class="question-block" id="q1" data-answer="B" data-qnum="1">
+            <div class="question-title">1. 下列文句中的「即」字,何者為「靠近」之意?</div>
+            <label class="option-label"><input type="radio" name="q1" value="A"> (A) 被熱水燙傷之後,應該立「即」用大量冷水沖洗</label>
+            <label class="option-label"><input type="radio" name="q1" value="B"> (B) 他們兩個人的關係若「即」若離,真令人難以捉摸</label>
+            <label class="option-label"><input type="radio" name="q1" value="C"> (C) 本活動摸彩中獎者,憑票根「即」可至服務臺領取獎品</label>
+            <label class="option-label"><input type="radio" name="q1" value="D"> (D) 我不是你的傭人,別以為我可以招之「即」來,揮之即去</label>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question-block" id="q2" data-answer="A" data-qnum="2">
+            <div class="question-title">2. 「臺灣泰式餐館幾乎都供應的椒麻雞，其實是出身雲南的混血菜。滇、緬、泰、越、寮位置鄰近，料理自然互相滲透...」關於料理的敘述，下列何者最接近本文的觀點？</div>
+            <label class="option-label"><input type="radio" name="q2" value="A"> (A) 料理會因地緣關係而互相影響</label>
+            <label class="option-label"><input type="radio" name="q2" value="B"> (B) 異鄉遊子對童年吃食特別難忘</label>
+            <label class="option-label"><input type="radio" name="q2" value="C"> (C) 戰火頻仍地區的料理多半偏辣</label>
+            <label class="option-label"><input type="radio" name="q2" value="D"> (D) 餐館會依消費者需求調整口味</label>
+        </div>
+
+        <!-- Q3 -->
+        <div class="question-block" id="q3" data-answer="D" data-qnum="3">
+            <div class="question-title">3. 【資料一】史學家的價值判斷如同一把最尖利的剪刀... 【資料二】史學家的解釋也互有出入... 上課時老師提供這兩則資料給同學討論，關於資料的解讀，下列何者的發言最恰當？</div>
+            <label class="option-label"><input type="radio" name="q3" value="A"> (A) 根據資料一，我認為史學家對歷史的猜測不帶偏見</label>
+            <label class="option-label"><input type="radio" name="q3" value="B"> (B) 依照資料二，我看見歷史不一定具有客觀性</label>
+            <label class="option-label"><input type="radio" name="q3" value="C"> (C) 我發現資料一、二都認為我們不可以懷疑史學家的記載</label>
+            <label class="option-label"><input type="radio" name="q3" value="D"> (D) 我覺得資料一、二都認為史學家對歷史會有不同詮釋</label>
+        </div>
+
+        <!-- Q4 -->
+        <div class="question-block" id="q4" data-answer="A" data-qnum="4">
+            <div class="question-title">4. 根據資料判斷（《說文解字》：「鬲，鼎屬也...象腹交文，三足。」），「鬲」最可能屬於下列哪一種造字法則？</div>
+            <label class="option-label"><input type="radio" name="q4" value="A"> (A) 象形</label>
+            <label class="option-label"><input type="radio" name="q4" value="B"> (B) 指事</label>
+            <label class="option-label"><input type="radio" name="q4" value="C"> (C) 會意</label>
+            <label class="option-label"><input type="radio" name="q4" value="D"> (D) 形聲</label>
+        </div>
+
+        <!-- Q5 -->
+        <div class="question-block" id="q5" data-answer="D" data-qnum="5">
+            <div class="question-title">5. 「散文貴在自由【 】體例的自由、選材的自由、篇幅的自由、表達思想的自由。」根據文意脈絡，缺空處最適合填入下列哪一個標點符號？</div>
+            <label class="option-label"><input type="radio" name="q5" value="A"> (A) 、 (頓號)</label>
+            <label class="option-label"><input type="radio" name="q5" value="B"> (B) …… (刪節號)</label>
+            <label class="option-label"><input type="radio" name="q5" value="C"> (C) ？ (問號)</label>
+            <label class="option-label"><input type="radio" name="q5" value="D"> (D) —— (破折號)</label>
+        </div>
+
+        <!-- Q7 -->
+        <div class="question-block" id="q7" data-answer="C" data-qnum="7">
+            <div class="question-title">7. 下列文句「」中的字，何者讀音正確？</div>
+            <label class="option-label"><input type="radio" name="q7" value="A"> (A) 海嘯過後，小鎮滿目「瘡」痍：ㄘㄤ</label>
+            <label class="option-label"><input type="radio" name="q7" value="B"> (B) 此事部長的心意已決，不容他人置「喙」：ㄓㄨㄛˊ</label>
+            <label class="option-label"><input type="radio" name="q7" value="C"> (C) 電影首映會當晚，導演「偕」同主要演員一起出席：ㄒㄧㄝˊ</label>
+            <label class="option-label"><input type="radio" name="q7" value="D"> (D) 這兩者「孰」輕孰重，你要考慮清楚，以免將來後悔：ㄕㄡˊ</label>
+        </div>
+
+        <!-- Q10 -->
+        <div class="question-block" id="q10" data-answer="D" data-qnum="10">
+            <div class="question-title">10. 《魏三體石經》每字皆刻三種字體，已知其中二種字體為古文、篆書。據此判斷，圖中第三種字體應為下列何者？（蠶頭雁尾）</div>
+            <label class="option-label"><input type="radio" name="q10" value="A"> (A) 行書</label>
+            <label class="option-label"><input type="radio" name="q10" value="B"> (B) 草書</label>
+            <label class="option-label"><input type="radio" name="q10" value="C"> (C) 楷書</label>
+            <label class="option-label"><input type="radio" name="q10" value="D"> (D) 隸書</label>
+        </div>
+
+        <!-- Q11 -->
+        <div class="question-block" id="q11" data-answer="B" data-qnum="11">
+            <div class="question-title">11. 所謂的「寫真式描寫」注重的是清楚明確，以細密的筆觸刻畫完整的形貌... 根據本文，下列何者最符合「寫真式描寫」？</div>
+            <label class="option-label"><input type="radio" name="q11" value="A"> (A) 他們明明知道要滴下眉毛上的汗珠，才能撿起田中的麥穗，而為什麼要謝天</label>
+            <label class="option-label"><input type="radio" name="q11" value="B"> (B) 他用兩手攀著上面，兩腳再向上縮，他肥胖的身子向左微傾，顯出努力的樣子</label>
+            <label class="option-label"><input type="radio" name="q11" value="C"> (C) 頃刻間這周遭瀰漫了清晨富麗的溫柔，頃刻間你的心懷也分潤了白天誕生的光榮</label>
+            <label class="option-label"><input type="radio" name="q11" value="D"> (D) 有一些事，卻像夏日的小河、冬天的落葉，像春花，也像秋草，似無所見，又非視而不見</label>
+        </div>
+
+        <!-- Q13 -->
+        <div class="question-block" id="q13" data-answer="A" data-qnum="13">
+            <div class="question-title">13. （齊高帝與王僧虔賭書，作者評：猶雞之搏狸，稍不自知量力也。）關於文中人物書法的比較，下列敘述何者最恰當？</div>
+            <label class="option-label"><input type="radio" name="q13" value="A"> (A) 作者認為高帝書法不如僧虔</label>
+            <label class="option-label"><input type="radio" name="q13" value="B"> (B) 作者認為子敬書法天下第一</label>
+            <label class="option-label"><input type="radio" name="q13" value="C"> (C) 子敬覺得高帝的草書缺乏風骨</label>
+            <label class="option-label"><input type="radio" name="q13" value="D"> (D) 僧虔自認與高帝賭書猶雞之搏狸</label>
+        </div>
+
+        <!-- Q19 -->
+        <div class="question-block" id="q19" data-answer="A" data-qnum="19">
+            <div class="question-title">19. 下列文句「」中的成語，何者使用最恰當？</div>
+            <label class="option-label"><input type="radio" name="q19" value="A"> (A) 這篇作品文采出眾，「胸無點墨」的人是寫不出來的</label>
+            <label class="option-label"><input type="radio" name="q19" value="B"> (B) 辛勤工作之餘也要適時休息，才能達到「休戚與共」</label>
+            <label class="option-label"><input type="radio" name="q19" value="C"> (C) 這兩個友好的國家交流往來頻繁，關係「間不容髮」</label>
+            <label class="option-label"><input type="radio" name="q19" value="D"> (D) 他嚮往「瓜田李下」的鄉間生活，毫不猶豫搬離市區</label>
+        </div>
+
+        <!-- Reading Group 1: 24-25 -->
+        <div class="reading-text">
+            <strong>請閱讀以下詩作，並回答 24~25 題：</strong><br>
+            【麻薏】夏天的野性是限量的，把它搓擠出來，洗成一碗滑潤的溫柔。啊！原來夏天如此爽口，那深綠色的苦鹹甜，是去年與誰的故事？<br>
+            【黑白切】一盤切碎的心肝腸肺，隨意地被夾起，咀嚼一種零零落落，毫無秩序的酸甜苦辣。分明是一道小菜，卻讓黑與白拼出了生活的色香味。
+        </div>
+        <div class="question-block" id="q24" data-answer="B" data-qnum="24">
+            <div class="question-title">24. 關於這二節詩的分析，下列敘述何者最恰當？</div>
+            <label class="option-label"><input type="radio" name="q24" value="A"> (A) 第一節以「野性」暗示作者正值年少</label>
+            <label class="option-label"><input type="radio" name="q24" value="B"> (B) 第二節以「切碎」呼應「零零落落」</label>
+            <label class="option-label"><input type="radio" name="q24" value="C"> (C) 第一節穿插驚嘆語句，表達吃不到的遺憾</label>
+            <label class="option-label"><input type="radio" name="q24" value="D"> (D) 第二節藉心肝腸肺的描摹，象徵人心險惡</label>
+        </div>
+        <div class="question-block" id="q25" data-answer="A" data-qnum="25">
+            <div class="question-title">25. 關於這二節詩的共同點，下列敘述何者最恰當？</div>
+            <label class="option-label"><input type="radio" name="q25" value="A"> (A) 皆透過描寫食物帶出生活的況味</label>
+            <label class="option-label"><input type="radio" name="q25" value="B"> (B) 皆引用典故連結食物與文化的關係</label>
+            <label class="option-label"><input type="radio" name="q25" value="C"> (C) 皆各自運用兩種顏色的對比，意象鮮明</label>
+            <label class="option-label"><input type="radio" name="q25" value="D"> (D) 皆以當季食材入詩，強調美好事物稍縱即逝</label>
+        </div>
+
+        <!-- Reading Group 2: 33-34 -->
+        <div class="reading-text">
+            <strong>請閱讀以下短文，並回答 33~34 題：</strong><br>
+            唐玄宗時，翰林有三種：翰林待詔、翰林供奉、翰林學士。... 翰林供奉是翰林待詔裡的佼佼者... 翰林學士又是翰林供奉裡的佼佼者，不光文筆一流，還通曉政治。朝廷把這批人才從待詔和供奉裡發掘出來，讓他們單獨辦公。... 其中翰林待詔的薪水參照九品京官，翰林供奉的薪水參照八品京官。
+        </div>
+        <div class="question-block" id="q33" data-answer="C" data-qnum="33">
+            <div class="question-title">33. 關於文中翰林供奉的敘述，下列何者最恰當？</div>
+            <label class="option-label"><input type="radio" name="q33" value="A"> (A) 可獨立辦公</label>
+            <label class="option-label"><input type="radio" name="q33" value="B"> (B) 有很多兼職收入</label>
+            <label class="option-label"><input type="radio" name="q33" value="C"> (C) 薪水比照八品京官</label>
+            <label class="option-label"><input type="radio" name="q33" value="D"> (D) 不能幫皇帝處理奏章</label>
+        </div>
+        <div class="question-block" id="q34" data-answer="B" data-qnum="34">
+            <div class="question-title">34. 根據本文，下列推論何者最恰當？</div>
+            <label class="option-label"><input type="radio" name="q34" value="A"> (A) 尚書和侍郎通常也兼任翰林供奉</label>
+            <label class="option-label"><input type="radio" name="q34" value="B"> (B) 翰林學士處理政務的能力優於翰林供奉</label>
+            <label class="option-label"><input type="radio" name="q34" value="C"> (C) 翰林待詔是唐玄宗重要的行政幕僚之一</label>
+            <label class="option-label"><input type="radio" name="q34" value="D"> (D) 翰林待詔與翰林學士的差別在專門品級的高低</label>
+        </div>
+
+        <!-- Reading Group 3: 37-38 -->
+        <div class="reading-text">
+            <strong>請閱讀以下短文，並回答 37~38 題：</strong><br>
+            東非草原上，金合歡樹提供原生舉尾蟻花蜜與住所，而舉尾蟻會保護金合歡免受食草性動物侵害。21世紀初，外來的熱帶大頭家蟻突然出現在肯亞，牠們會殺死舉尾蟻...讓非洲象得以肆無忌憚地啃食金合歡。這導致金合歡覆蓋面積急劇減少，使獅子很難偷偷靠近並伏擊斑馬...
+        </div>
+        <div class="question-block" id="q37" data-answer="C" data-qnum="37">
+            <div class="question-title">37. 根據本文，關於熱帶大頭家蟻入侵肯亞保護區後的生態變化，下列敘述何者最恰當？</div>
+            <label class="option-label"><input type="radio" name="q37" value="A"> (A) 獅子數量減少</label>
+            <label class="option-label"><input type="radio" name="q37" value="B"> (B) 斑馬易受獅子攻擊</label>
+            <label class="option-label"><input type="radio" name="q37" value="C"> (C) 金合歡易受大象破壞</label>
+            <label class="option-label"><input type="radio" name="q37" value="D"> (D) 舉尾蟻不再攻擊大象</label>
+        </div>
+        <div class="question-block" id="q38" data-answer="A" data-qnum="38">
+            <div class="question-title">38. 依據本文引述的研究發現，無法說明下列何者？</div>
+            <label class="option-label"><input type="radio" name="q38" value="A"> (A) 設置保護區有助於維護自然原始生態</label>
+            <label class="option-label"><input type="radio" name="q38" value="B"> (B) 外來物種可能會對本地生態造成衝擊</label>
+            <label class="option-label"><input type="radio" name="q38" value="C"> (C) 面對環境的變遷，生命自會找到出路</label>
+            <label class="option-label"><input type="radio" name="q38" value="D"> (D) 破壞生物間的互利關係恐有連鎖反應</label>
+        </div>
+    </form>
+
+    <!-- 對答與PDF按鈕 -->
+    <div class="controls">
+        <button type="button" id="submit-btn" class="btn btn-submit">✅ 對答</button>
+        <button type="button" id="retry-btn" class="btn btn-retry">🔄 重新作答</button>
+        <a href="114會考國文解析.pdf" target="_blank" class="btn btn-pdf">📄 前往查看 PDF 詳解</a>
+    </div>
+
+    <!-- 成績結果顯示區 -->
+    <div id="result-section" class="result-section">
+        <div id="result-message" class="result-message"></div>
+        <p id="result-stats" style="text-align: center; font-size: 1.1em;"></p>
+    </div>
+
+    <!-- 歷史紀錄顯示區 -->
+    <div class="history-section">
+        <h3>📜 歷史作答紀錄 <button id="clear-history-btn" class="btn-clear">清除紀錄</button></h3>
+        <ul id="history-list" class="history-list">
+            <!-- 歷史紀錄將動態生成於此 -->
+        </ul>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const submitBtn = document.getElementById('submit-btn');
+            const retryBtn = document.getElementById('retry-btn');
+            const clearHistoryBtn = document.getElementById('clear-history-btn');
+            const questions = document.querySelectorAll('.question-block');
+            const resultSection = document.getElementById('result-section');
+            const resultMessage = document.getElementById('result-message');
+            const resultStats = document.getElementById('result-stats');
+            const historyList = document.getElementById('history-list');
+            
+            // 從 LocalStorage 讀取歷史紀錄
+            let historyData = JSON.parse(localStorage.getItem('chineseQuizHistory')) || [];
+
+            // 負責將紀錄顯示到網頁上的函數
+            function renderHistory() {
+                historyList.innerHTML = '';
+                if (historyData.length === 0) {
+                    historyList.innerHTML = '<li>目前尚無作答紀錄。</li>';
+                    return;
+                }
+                historyData.forEach((record, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>第 ${index + 1} 次作答</strong> ── 答對題數：${record.correctCount} 題，答對率：${record.accuracy}%。<br><span style="color:#e74c3c; font-size: 0.9em;">答錯題號：${record.wrong}</span>`;
+                    historyList.appendChild(li);
+                });
+            }
+
+            // 網頁載入時先顯示一次歷史紀錄
+            renderHistory();
+
+            submitBtn.addEventListener('click', () => {
+                let allAnswered = true;
+                let firstUnanswered = null;
+                let correctCount = 0;
+                let wrongQNums = [];
+                const totalQs = questions.length;
+
+                questions.forEach(q => {
+                    const inputs = q.querySelectorAll('input[type="radio"]');
+                    let isAnswered = false;
+                    let selectedVal = null;
+                    
+                    inputs.forEach(input => {
+                        if (input.checked) {
+                            isAnswered = true;
+                            selectedVal = input.value;
+                        }
+                    });
+
+                    if (!isAnswered) {
+                        allAnswered = false;
+                        if (!firstUnanswered) firstUnanswered = q;
+                    } else {
+                        const correctAns = q.getAttribute('data-answer');
+                        const qNum = q.getAttribute('data-qnum');
+                        if (selectedVal !== correctAns) {
+                            q.classList.add('wrong');
+                            wrongQNums.push(qNum);
+                        } else {
+                            q.classList.remove('wrong');
+                            correctCount++;
+                        }
+                    }
+                });
+
+                if (!allAnswered) {
+                    firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    alert("尚有未作答的題目，網頁已自動為您跳至該題。");
+                    return;
+                }
+
+                // 計算成績
+                const accuracy = Math.round((correctCount / totalQs) * 100);
+                const wrongText = wrongQNums.length > 0 ? wrongQNums.join(', ') : '無 (全對)';
+
+                // 動態評語
+                let msg = "";
+                if (accuracy === 100) {
+                    msg = "恭喜你使出極限威能打敗了本關BOSS 🏆";
+                    resultMessage.style.color = "#27ae60";
+                } else if (accuracy >= 80) {
+                    msg = "我知道你可以的，不確定的選項再確認清楚然後來挑戰大魔王吧 💪";
+                    resultMessage.style.color = "#2980b9";
+                } else if (accuracy < 60) {
+                    msg = "被爆裂噴飛惹，練完功再來挑戰吧 💥";
+                    resultMessage.style.color = "#c0392b";
+                } else {
+                    msg = "表現不錯，繼續加油！✨";
+                    resultMessage.style.color = "#f39c12";
+                }
+
+                resultSection.style.display = "block";
+                resultMessage.innerHTML = msg;
+                resultStats.innerHTML = `本次得分：<strong>${accuracy}%</strong><br>答對題數：${correctCount} / ${totalQs}`;
+
+                // 將這次的成績打包存入陣列，並寫入 localStorage
+                historyData.push({
+                    correctCount: correctCount,
+                    accuracy: accuracy,
+                    wrong: wrongText
+                });
+                localStorage.setItem('chineseQuizHistory', JSON.stringify(historyData));
+                
+                // 重新渲染歷史紀錄
+                renderHistory();
+
+                submitBtn.style.display = "none";
+                retryBtn.style.display = "inline-block";
+                resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+
+            retryBtn.addEventListener('click', () => {
+                questions.forEach(q => {
+                    q.classList.remove('wrong');
+                    const inputs = q.querySelectorAll('input[type="radio"]');
+                    inputs.forEach(input => input.checked = false);
+                });
+                resultSection.style.display = "none";
+                retryBtn.style.display = "none";
+                submitBtn.style.display = "inline-block";
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // 清除紀錄功能
+            clearHistoryBtn.addEventListener('click', () => {
+                if (confirm("確定要清除所有作答紀錄嗎？")) {
+                    localStorage.removeItem('chineseQuizHistory');
+                    historyData = [];
+                    renderHistory();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
