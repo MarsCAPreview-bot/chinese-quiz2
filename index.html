@@ -20,25 +20,15 @@
         }
         .info-bar {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             background-color: #fff;
             padding: 15px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             margin-bottom: 20px;
-        }
-        .pdf-link {
-            text-decoration: none;
-            color: #fff;
-            background-color: #3498db;
-            padding: 10px 15px;
-            border-radius: 5px;
             font-weight: bold;
-            transition: background 0.3s;
-        }
-        .pdf-link:hover {
-            background-color: #2980b9;
+            color: #2c3e50;
         }
         .question-block {
             background-color: #fff;
@@ -83,10 +73,16 @@
             margin-right: 15px;
             transform: scale(1.2);
         }
+        
+        /* 按鈕區塊設定 */
         .controls {
             text-align: center;
             margin-top: 30px;
             margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
         }
         .btn {
             font-size: 1.2em;
@@ -97,7 +93,6 @@
             font-weight: bold;
             color: white;
             transition: background 0.3s;
-            margin: 0 10px;
         }
         .btn-submit {
             background-color: #2ecc71;
@@ -112,6 +107,17 @@
         .btn-retry:hover {
             background-color: #d68910;
         }
+        .btn-pdf {
+            background-color: #3498db;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-pdf:hover {
+            background-color: #2980b9;
+        }
+
         .result-section {
             background-color: #fff;
             padding: 20px;
@@ -138,6 +144,21 @@
             color: #34495e;
             border-bottom: 2px solid #ecf0f1;
             padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-clear {
+            font-size: 0.8em;
+            padding: 5px 10px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .btn-clear:hover {
+            background-color: #c0392b;
         }
         .history-list {
             list-style-type: none;
@@ -157,9 +178,7 @@
     <h1>國文會考測驗 (對應教材：第一、二冊)</h1>
     
     <div class="info-bar">
-        <span>請完成所有題目後點擊「對答」。</span>
-        <!-- 請將 href 的網址替換為您在 github 上傳的 PDF 連結 -->
-        <a href="115會考國文解析.pdf" target="_blank" class="pdf-link">📄 前往查看 PDF 詳解</a>
+        <span>請完成所有題目後，點擊最下方「對答」按鈕。</span>
     </div>
 
     <form id="quiz-form">
@@ -315,18 +334,22 @@
         </div>
     </form>
 
+    <!-- 對答與PDF按鈕移至最下方 -->
     <div class="controls">
-        <button type="button" id="submit-btn" class="btn btn-submit">對答</button>
-        <button type="button" id="retry-btn" class="btn btn-retry">重新作答</button>
+        <button type="button" id="submit-btn" class="btn btn-submit">✅ 對答</button>
+        <button type="button" id="retry-btn" class="btn btn-retry">🔄 重新作答</button>
+        <a href="115會考國文解析.pdf" target="_blank" class="btn btn-pdf">📄 前往查看 PDF 詳解</a>
     </div>
 
+    <!-- 成績結果顯示區 -->
     <div id="result-section" class="result-section">
         <div id="result-message" class="result-message"></div>
         <p id="result-stats" style="text-align: center; font-size: 1.1em;"></p>
     </div>
 
+    <!-- 歷史紀錄顯示區 -->
     <div class="history-section">
-        <h3>📜 作答紀錄</h3>
+        <h3>📜 歷史作答紀錄 <button id="clear-history-btn" class="btn-clear">清除紀錄</button></h3>
         <ul id="history-list" class="history-list">
             <!-- 歷史紀錄將動態生成於此 -->
         </ul>
@@ -336,13 +359,32 @@
         document.addEventListener('DOMContentLoaded', () => {
             const submitBtn = document.getElementById('submit-btn');
             const retryBtn = document.getElementById('retry-btn');
+            const clearHistoryBtn = document.getElementById('clear-history-btn');
             const questions = document.querySelectorAll('.question-block');
             const resultSection = document.getElementById('result-section');
             const resultMessage = document.getElementById('result-message');
             const resultStats = document.getElementById('result-stats');
             const historyList = document.getElementById('history-list');
             
-            let attemptCount = 0;
+            // 從 LocalStorage 讀取歷史紀錄
+            let historyData = JSON.parse(localStorage.getItem('chineseQuizHistory')) || [];
+
+            // 負責將紀錄顯示到網頁上的函數
+            function renderHistory() {
+                historyList.innerHTML = '';
+                if (historyData.length === 0) {
+                    historyList.innerHTML = '<li>目前尚無作答紀錄。</li>';
+                    return;
+                }
+                historyData.forEach((record, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>第 ${index + 1} 次作答</strong> ── 答對題數：${record.correctCount} 題，答對率：${record.accuracy}%。<br><span style="color:#e74c3c; font-size: 0.9em;">答錯題號：${record.wrong}</span>`;
+                    historyList.appendChild(li);
+                });
+            }
+
+            // 網頁載入時先顯示一次歷史紀錄
+            renderHistory();
 
             submitBtn.addEventListener('click', () => {
                 let allAnswered = true;
@@ -351,7 +393,6 @@
                 let wrongQNums = [];
                 const totalQs = questions.length;
 
-                // 檢查與計算
                 questions.forEach(q => {
                     const inputs = q.querySelectorAll('input[type="radio"]');
                     let isAnswered = false;
@@ -380,17 +421,17 @@
                     }
                 });
 
-                // 若有未作答題目，自動跳轉
                 if (!allAnswered) {
                     firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     alert("尚有未作答的題目，網頁已自動為您跳至該題。");
                     return;
                 }
 
-                attemptCount++;
+                // 計算成績
                 const accuracy = Math.round((correctCount / totalQs) * 100);
+                const wrongText = wrongQNums.length > 0 ? wrongQNums.join(', ') : '無 (全對)';
 
-                // 動態評語判定
+                // 動態評語
                 let msg = "";
                 if (accuracy === 100) {
                     msg = "恭喜你使出極限威能打敗了本關BOSS 🏆";
@@ -406,38 +447,45 @@
                     resultMessage.style.color = "#f39c12";
                 }
 
-                // 顯示結果
                 resultSection.style.display = "block";
                 resultMessage.innerHTML = msg;
                 resultStats.innerHTML = `本次得分：<strong>${accuracy}%</strong><br>答對題數：${correctCount} / ${totalQs}`;
 
-                // 寫入歷史紀錄
-                const li = document.createElement('li');
-                const wrongText = wrongQNums.length > 0 ? wrongQNums.join(', ') : '無 (全對)';
-                li.innerHTML = `<strong>第 ${attemptCount} 次作答</strong> ── 答對題數：${correctCount} 題，答對率：${accuracy}%。<br><span style="color:#e74c3c; font-size: 0.9em;">答錯題號：${wrongText}</span>`;
-                historyList.appendChild(li);
+                // 將這次的成績打包存入陣列，並寫入 localStorage
+                historyData.push({
+                    correctCount: correctCount,
+                    accuracy: accuracy,
+                    wrong: wrongText
+                });
+                localStorage.setItem('chineseQuizHistory', JSON.stringify(historyData));
+                
+                // 重新渲染歷史紀錄
+                renderHistory();
 
-                // 切換按鈕狀態
                 submitBtn.style.display = "none";
                 retryBtn.style.display = "inline-block";
                 resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
             });
 
             retryBtn.addEventListener('click', () => {
-                // 清除選取狀態與紅框
                 questions.forEach(q => {
                     q.classList.remove('wrong');
                     const inputs = q.querySelectorAll('input[type="radio"]');
                     inputs.forEach(input => input.checked = false);
                 });
-                
-                // 隱藏結果區，重置按鈕
                 resultSection.style.display = "none";
                 retryBtn.style.display = "none";
                 submitBtn.style.display = "inline-block";
-                
-                // 回到最上面
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // 清除紀錄功能 (選用)
+            clearHistoryBtn.addEventListener('click', () => {
+                if (confirm("確定要清除所有作答紀錄嗎？")) {
+                    localStorage.removeItem('chineseQuizHistory');
+                    historyData = [];
+                    renderHistory();
+                }
             });
         });
     </script>
